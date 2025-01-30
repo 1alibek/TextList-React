@@ -44,6 +44,11 @@ function App() {
     setTodos(newTodos);
     saveTodos(newTodos);
   };
+  const progres=()=>{
+    if(todos.length==0) return 0
+    const completedText=todos.filter((value)=>value.completed).length
+    return Math.round((completedText/todos.length)*100)
+  }
 
   return (
     <div className="min-h-screen bg-[#caf0f8] flex flex-col items-center py-10">
@@ -90,6 +95,23 @@ function App() {
           </li>
         ))}
       </ul>
+      {todos.length !== 0 ? (
+        <div className="flex flex-col gap-[5px] w-[30%] my-4">
+          <div className="w-full flex justify-between items-center gap-[10px]">
+            <h1 className="font-[600]">Progress</h1>
+            <p className="font-[600]">{progres()}%</p>
+          </div>
+          <div className="w-full overflow-hidden flex justify-start h-[13px] bg-gray-300 rounded-[10px]">
+            <div
+              style={{ width: `${progres()}%` }}
+              className="h-full bg-blue-400"
+            ></div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <Card />
     </div>
   );
