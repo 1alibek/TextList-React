@@ -74,17 +74,12 @@ function App() {
             id={`todo-${index}`}
             className="flex justify-between items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
             style={{
-              textDecoration: todo.completed ? "line-through" : "none", 
+              textDecoration: todo.completed ? "line-through" : "none",
             }}
           >
             <span>{todo.text}</span>
             <div className="flex gap-2">
-              <button
-                onClick={() => toggleComplete(index)} 
-                className="text-yellow-500 hover:text-yellow-700"
-              >
-                <TbCopyCheck />
-              </button>
+              <input type="checkbox" onChange={() => toggleComplete(index)} />
               <button
                 onClick={() => deleteTodo(index)}
                 className="text-red-500 hover:text-red-700"
