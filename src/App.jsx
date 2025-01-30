@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { TbLetterX } from "react-icons/tb";
 import { TbCopyCheck } from "react-icons/tb";
 import Card from "./card";
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [todoText, setTodoText] = useState("");
- 
+
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todoList")) || [];
     setTodos(storedTodos);
@@ -19,10 +20,11 @@ function App() {
     e.preventDefault();
     if (todoText.trim() === "") {
       return;
-    } else if (todos.includes(todoText)) {
+    } else if (todos.some((todo) => todo.text === todoText)) {
       return;
     } else {
-      const newTodos = [...todos, todoText];
+      const newTodo = { text: todoText, completed: false };
+      const newTodos = [...todos, newTodo];
       setTodos(newTodos);
       saveTodos(newTodos);
       setTodoText("");
@@ -31,6 +33,14 @@ function App() {
 
   const deleteTodo = (index) => {
     const newTodos = todos.filter((_, i) => i !== index);
+    setTodos(newTodos);
+    saveTodos(newTodos);
+  };
+
+  const toggleComplete = (index) => {
+    const newTodos = todos.map((todo, i) =>
+      i === index ? { ...todo, completed: !todo.completed } : todo
+    );
     setTodos(newTodos);
     saveTodos(newTodos);
   };
@@ -63,21 +73,25 @@ function App() {
             key={index}
             id={`todo-${index}`}
             className="flex justify-between items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm"
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none", 
+            }}
           >
-            <>
-              <span>{todo}</span>
-              <div className="flex gap-2">
-                <button className="text-yellow-500 hover:text-yellow-700">
-                  <TbCopyCheck />
-                </button>
-                <button
-                  onClick={() => deleteTodo(index)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <TbLetterX />
-                </button>
-              </div>
-            </>
+            <span>{todo.text}</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => toggleComplete(index)} 
+                className="text-yellow-500 hover:text-yellow-700"
+              >
+                <TbCopyCheck />
+              </button>
+              <button
+                onClick={() => deleteTodo(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <TbLetterX />
+              </button>
+            </div>
           </li>
         ))}
       </ul>
