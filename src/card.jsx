@@ -1,16 +1,15 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const Card = () => {
   const [data, setData] = useState([]);
 
-  let BASE_URL = "https://fakestoreapi.com/products";
-
   useEffect(() => {
-    fetch(BASE_URL)
-      .then((response) => response.json())
-      .then((res) => setData(res))
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/products`)
+      .then((data) => setData(data.data))
       .catch((err) => console.log(err));
-  }, []); 
+  }, []);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
